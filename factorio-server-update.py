@@ -4,20 +4,20 @@ import datetime
 import os
 import tarfile
 
+copy_mods = False
+fp = get_server_dir()
+time = get_time()
+
 def get_latest_server(fp):
     url = "https://factorio.com/get-download/stable/headless/linux64"
     filename = "/factorio-headless-stable.tar.xz"
-
     print("Downloading latest stable server...")
     temp = get(url, allow_redirects=True)
-
     print("Download Complete! Saving file to:", fp + filename)
-
     open(fp + filename, 'wb').write(temp.content)
 
 def get_time():
-    time = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
-    return(time)
+    return(datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S"))
 
 def get_server_dir():
     try:
@@ -41,7 +41,6 @@ def rename_server(fp, time):
 
 def extract_tar(fp, time):
     rename_server(fp, time)
-
     print("Extracting tar...")
     try:
         with tarfile.open(fp + '/factorio-headless-stable.tar.xz', 'r') as tar:
@@ -57,9 +56,7 @@ def copy_server_data(fp,time,copy_mods):
             copyfile(fp + '/factorio' + time + i, fp + '/factorio' + i)
             print("Copied", i)
         except FileNotFoundError as error:
-            print(error)
-            print("one or more of the following files failed to copy", files_to_copy)
-            print("check that these files exist, you may have to copy them manually")
+            print("the following file failed to copy:", error)
     if copy_mods:
         print("Copying mods...")
         try:
@@ -68,19 +65,11 @@ def copy_server_data(fp,time,copy_mods):
             print(error)
             print("Unable to copy mods")
 
-
-fp = get_server_dir()
-time = get_time()
-
 if input("would you like to copy mods? y/n:").lower() == 'y':
     copy_mods = True
-else:
-    copy_mods = False
 
 get_latest_server(fp)
-
 extract_tar(fp, time)
-
 copy_server_data(fp,time,copy_mods)
 
 print("Done")
