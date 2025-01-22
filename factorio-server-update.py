@@ -4,10 +4,6 @@ import datetime
 import os
 import tarfile
 
-copy_mods = False
-fp = get_server_dir()
-time = get_time()
-
 def get_latest_server(fp):
     url = "https://factorio.com/get-download/stable/headless/linux64"
     filename = "/factorio-headless-stable.tar.xz"
@@ -49,7 +45,7 @@ def extract_tar(fp, time):
         print(error)
 
 def copy_server_data(fp,time,copy_mods):
-    files_to_copy = ['/achievements.dat', '/player-data.json', '/data/server-settings.json', '/data/server-whitelist.json']
+    files_to_copy = ['/achievements.dat', '/player-data.json', '/data/server-settings.json', '/data/server-whitelist.json', '/server-adminlist.json']
     print("Copying server files...")
     for i in files_to_copy:
         try:
@@ -67,6 +63,11 @@ def copy_server_data(fp,time,copy_mods):
 
 if input("would you like to copy mods? y/n:").lower() == 'y':
     copy_mods = True
+
+
+copy_mods = False
+fp = get_server_dir()
+time = get_time()
 
 get_latest_server(fp)
 extract_tar(fp, time)
