@@ -61,11 +61,9 @@ def copy_server_data(fp,time,copy_mods):
             print(error)
             print("Unable to copy mods")
 
+copy_mods = False
 if input("would you like to copy mods? y/n:").lower() == 'y':
     copy_mods = True
-
-
-copy_mods = False
 fp = get_server_dir()
 time = get_time()
 
